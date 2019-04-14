@@ -1,0 +1,23 @@
+<html>
+	<head>
+		<title> PeerCycle: Rate your Ride </title>
+	</head>
+	<body>
+		<h1> PeerCycle </h1>
+		<h2> Rate your Ride </h3>
+		<p> Take this oppertunity to rate and comment on the bike you have just ridden. 
+		(Please limit your comments to those about the bike itself.) </p>
+		<p> On a scale of 1 to 5, how was your experience? 
+		(5 meaning Fantastic, 1 meaning Horrible.) </p>
+		<form action="/home/dmckeon/Desktop/Review/review_sent.html" target="_blank" method="GET">
+			<input type="radio" name="rating" value="5*">5
+			<input type="radio" name="rating" value="4*">4
+			<input type="radio" name="rating" value="3*">3
+			<input type="radio" name="rating" value="2*">2
+			<input type="radio" name="rating" value="1*">1
+			<h3> Write a review </h3>
+			<textarea name="message" rows="7" cols="75">What did you like or dislike? What do you want other customers to know?</textarea>
+			<input type="submit" value="Submit">
+		</form>
+	</body>
+</html>
