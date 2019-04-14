@@ -75,7 +75,7 @@ class login:
         if session.loggedIn:
             raise web.seeother('/welcome')
         else:
-            return render_template('login.html')
+            return render_template('Login.html')
 
     def POST(self):
         user, passwd = web.input().user, web.input().passwd
@@ -103,7 +103,7 @@ class logout:
     def GET(self):
         session.loggedIn = False
         session.kill()
-        return render_template('logout.html')
+        return render_template('Logout.html')
 
 ##########################################################################
 ################# DO NOT CHANGE ANYTHING BELOW THIS LINE! ################
