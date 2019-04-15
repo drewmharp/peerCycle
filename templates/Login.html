@@ -7,8 +7,9 @@
 <form action="login" method="POST">
     <table id="login">
         <tr>
-            <td>User: </td>
-            <td><input type="text" name="user" autofocus></td>
+            <td>Email: </td>
+            <td><input type="email" name="email" autofocus
+		pattern = ".+@.+\..+"></td>
         </tr>
         <tr>
             <td>Password: </td>
@@ -20,5 +21,7 @@
         </tr>
     </table>
 </form>
+
+Don't have an account? <a href = "create">Make an Account</a>
 </body>
 </html>

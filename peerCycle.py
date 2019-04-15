@@ -1,7 +1,7 @@
 import os
 import web
 from jinja2 import Environment, FileSystemLoader
-
+from passlib.hash import pbkdf2_sha256 as sha256
 # Sessions don't work in debug mode.
 web.config.debug = False
 
@@ -50,12 +50,13 @@ urls = (
     '/', 'login',
     '/login', 'login',
     '/logout', 'logout',
-    
+    '/welcome','welcome', 
+    '/create','create'
 )
 
 # Create the database object.
-db = web.database(dbn='postgres', user='demo', pw='demo',
-                  db='registration')
+db = web.database(dbn='postgres', user='guigriffins', pw='guigriffins',
+                  db='guigriffins')
 
 # Create the application object.
 app = web.application(urls, globals())
@@ -67,7 +68,7 @@ app = web.application(urls, globals())
 # WARNING: DO NOT CHANGE web.session.DiskStore()'S PARAMETER!
 session = web.session.Session(app,
           web.session.DiskStore('/var/lib/php/session'),
-              initializer={'loggedIn': False, 'user' : ''}
+              initializer={'loggedIn': False, 'user' : '', 'name' : ''}
           )
 
 class login:
@@ -78,24 +79,25 @@ class login:
             return render_template('Login.html')
 
     def POST(self):
-        user, passwd = web.input().user, web.input().passwd
+        email, passwd = web.input().email, web.input().passwd
         try:
             # Prevent SQL injection attacks.
-            query = 'select * from users where username=$usr;'
-            vars = {'usr':user}
+	    query = 'select * from person where email=$eml;'
+            vars = {'eml':email}
             result = db.query(query, vars)[0]
-            if passwd == result['password']:
-                session.loggedIn = True
-                session.user = user
-                return render_template('welcome.html', user=session.user)
-        except:
+            if sha256.verify(passwd,result['password']):
+               session.loggedIn = True
+               session.user = result['user'] 
+	       session.name = result['firstname']
+               return render_template('welcome.html', name = session.name)
+	except:
             pass
         raise web.seeother('/')
 
 class welcome:
     def GET(self):
         if session.loggedIn:
-            return render_template('welcome.html', user=session.user)
+            return render_template('welcome.html', name = session.name)
         else:
             raise web.seeother('/')
 
@@ -104,7 +106,17 @@ class logout:
         session.loggedIn = False
         session.kill()
         return render_template('Logout.html')
+class create:
+    def GET(self):
+	return render_template('createAccount.html')
 
+    def POST(self):
+	try:
+	    hashedPswd = sha256.hash(web.input().passwrd)
+	    db.insert('person', email = web.input().email, firstname = web.input().fName, lastname = web.input().lName,phonenumber = web.input().phNum, password = hashedPswd)	
+	    raise web.seeother('/login')
+	except:
+		pass
 ##########################################################################
 ################# DO NOT CHANGE ANYTHING BELOW THIS LINE! ################
 ##########################################################################
