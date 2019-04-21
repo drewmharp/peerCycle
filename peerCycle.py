@@ -51,7 +51,10 @@ urls = (
     '/login', 'login',
     '/logout', 'logout',
     '/welcome','welcome', 
-    '/create','create'
+    '/create','create',
+    '/bluecheese','search',
+    '/search','search',
+    '/trip','trip'
 )
 
 # Create the database object.
@@ -68,8 +71,8 @@ app = web.application(urls, globals())
 # WARNING: DO NOT CHANGE web.session.DiskStore()'S PARAMETER!
 session = web.session.Session(app,
           web.session.DiskStore('/var/lib/php/session'),
-              initializer={'loggedIn': False, 'user' : '', 'name' : ''}
-          )
+              initializer={'loggedIn': False, 'user' : '', 'name' : 'default name'}
+   )
 
 class login:
     def GET(self):
@@ -85,9 +88,13 @@ class login:
 	    query = 'select * from person where email=$eml;'
             vars = {'eml':email}
             result = db.query(query, vars)[0]
+	    print(result)
+	    print(result['password'])
+	    print(result['userid'])
+	
             if sha256.verify(passwd,result['password']):
                session.loggedIn = True
-               session.user = result['user'] 
+               session.user = result['userid']
 	       session.name = result['firstname']
                return render_template('welcome.html', name = session.name)
 	except:
@@ -105,7 +112,8 @@ class logout:
     def GET(self):
         session.loggedIn = False
         session.kill()
-        return render_template('Logout.html')
+       # return render_template('Logout.html')
+	raise web.seeother('/')
 class create:
     def GET(self):
 	return render_template('createAccount.html')
@@ -117,6 +125,41 @@ class create:
 	    raise web.seeother('/login')
 	except:
 		pass
+
+class search:
+    def GET(self):
+	allZips = list(db.query('select * from uniqZIPs;'))
+	return render_template('bikeSearch.html',name = session.name, allzips = allZips)
+		
+    def POST(self):
+	zipCode = web.input().zip
+	query = 'select * from bike where ZIPCode = $zip;'
+	vars = {'zip':zipCode}
+	results = list(db.query(query,vars))
+		
+	return render_template('bikeResult.html',name = session.name, results = results)		
+
+class trip:
+	
+    def POST(self):
+	#Get bike information
+	bikeID = web.input().bikeId
+	print(bikeID)
+	query = 'select * from bike where bikeid = $bID'
+	vars = {'bID':bikeID}
+	bike = db.query(query,vars)[0]
+	print(bike)
+	print(bike['ownerid'])
+	
+	#Get owner information
+        query = 'select userid,firstname,rating from person natural join (select * from owner where userID = $ownrID) as t1;'
+        vars = {'ownrID': bike['ownerid']}
+        print(db.query(query,vars))
+	owner = db.query(query,vars)[0]
+	
+	#Render page
+        return render_template('bookTrip.html', bike = bike, owner = owner)
+
 ##########################################################################
 ################# DO NOT CHANGE ANYTHING BELOW THIS LINE! ################
 ##########################################################################

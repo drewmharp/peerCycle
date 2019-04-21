@@ -1,0 +1,45 @@
+
+<h2> Result: </h2>
+<body>
+<a href = "/search">Return to Search</a>
+
+Hello, {{ name }}<br>
+
+<table>
+	<tr>
+		<th></th>
+		<th> Daily Rate </th>
+		<th> Hourly Rate </th>
+		<th> Type </th>
+		<th>Model</th>
+		<th> Make </th>
+ 		<th>Year</th>
+		<th>City</th>
+		<th>ZIP</th>
+		<th>Description</th>
+	</tr>
+{% for bike in results %}
+	
+	<tr>
+		<form method = "POST" action = "trip"> 
+	    <td><input type = "hidden" name = "bikeId" value = "{{ bike.bikeid }}"><input type = "submit" value = "Book"></td>
+		<td>{{ bike.dlyrate }}</td>
+		<td> {{ bike.hlyrate }} </td>
+		<td> {{ bike.biketype }} </td>
+		<td> {{ bike.model}} </td>
+		<td> {{ bike.make }} </td>
+		<td> {{ bike.modelyear }} </td>
+		<td> {{ bike.city }} </td>
+		<td> {{ bike.zipcode }} </td>
+		<td> {{ bike.description }} </td>
+	    </form>
+	</tr>
+	
+{% endfor %}
+
+</table>
+
+
+
+</body>
+

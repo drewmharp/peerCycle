@@ -1,0 +1,60 @@
+<html>
+	<h1>Book Trip</h1>
+	<table>
+		<tr>
+			<th>Owner: </th>
+			<td>{{ owner.firstname }}</td>
+			<th>Rating:
+			<td>{{ owner.rating }}</td>
+		</tr>
+	</table>
+	<table>
+			
+			<th> Daily Rate </th>
+			<th> Hourly Rate </th>
+			<th> Type </th>
+			<th>Model</th>
+			<th> Make </th>
+	 		<th>Year</th>
+			<th>City</th>
+			<th>ZIP</th>
+			<th>Description</th>
+		</tr>
+
+		<tr>
+			<td>{{ bike.dlyrate }}</td>
+			<td> {{ bike.hlyrate }} </td>
+			<td> {{ bike.biketype }} </td>
+			<td> {{ bike.model}} </td>
+			<td> {{ bike.make }} </td>
+			<td> {{ bike.modelyear }} </td>
+			<td> {{ bike.city }} </td>
+			<td> {{ bike.zipcode }} </td>
+			<td> {{ bike.description }} </td>
+		</tr>
+
+	</table>
+
+&nbsp
+&nbsp
+
+&nbsp
+&nbsp
+
+	<form method = "POST" name = "userTripSubm">
+		Hourly or Daily:
+		<select> 
+			<option value = "hrly">Hourly</option>
+			<option value = "dly">Daily</option>
+		</select>
+		Length of trip:
+		<input type = "number" name = "length" min = "1" max = "24">
+
+		Start Time/Date:
+			<input type = "time" name = "startTime">
+			<input type = "date" name = "startDate">
+		<input type = "submit" value = "Submit">
+	</form>
+
+
+</html>
