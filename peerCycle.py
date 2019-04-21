@@ -54,7 +54,8 @@ urls = (
     '/create','create',
     '/bluecheese','search',
     '/search','search',
-    '/trip','trip'
+    '/trip','trip',
+    '/addbike','addbike'
 )
 
 # Create the database object.
@@ -169,6 +170,10 @@ class book:
 	tripLength = web.input().length
 	startDate = 
 	startTime = 
+
+class addbike:
+    def GET(self):
+	return render_template('AddBikesOwners.html')
 ##########################################################################
 ################# DO NOT CHANGE ANYTHING BELOW THIS LINE! ################
 ##########################################################################

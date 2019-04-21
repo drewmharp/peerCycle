@@ -1,0 +1,52 @@
+<html>
+<head>
+<title>Owner</title>
+</head>
+<body>
+<h1>Owner</h1>
+<h1>Post Bike</h1>
+	<table id = "BIKE">
+		<tr>
+			<td>Make:</td>
+			<td><input type ="Make" name = "Make"></td>
+		</tr>
+		<tr>
+			<td> Model: </td>
+			<td><input type = "Model" name = "Model"></td>
+		</tr>
+		<tr>
+			<td> Model Year: </td>
+			<td><input type = "MakeYear" name = "MakeYear"></td>
+		</tr>
+		<tr>
+			<td> Description </td>
+			<textarea name="message" rows="7" cols="75"> Write a description about your bike.</textarea>
+			<input type="submit" value="Post">
+		</form>
+	</body>
+</html>
+
+
+<html>
+	<head>
+		<title> PeerCycle: Rating Received </title>
+	</head>
+	<body>
+		<h1> PeerCycle </h1>
+		<h2> Rating Recived </h2>
+		<p> Your review has been recived and will be processed shortly. </p>
+		<h3> Your Rating was <?php echo ($_GET["rating"]); ?>. </h3>
+		
+		<?php echo $_GET["message"]; ?><br>
+		
+		<form method="post" action="/home/dmckeon/Desktop/Review/homePage.html">
+			<button type="submit">Back to Home</button>
+		</form>
+		<form method="post" action="/home/dmckeon/Desktop/Review/tripDetails.html">
+			<button type="submit">Back to Trip Overview</button>
+		</form>
+		<form method="post" action="/home/dmckeon/Desktop/Review/reviewTest.html">
+			<button type="submit">Edit Review</button>
+		</form>
+	</body>
+</html>
