@@ -1,0 +1,31 @@
+<html>
+	
+<form action="search" method="POST">
+	<table id="bsearch">
+		<tr>
+			<td>
+			<select name = "searchType">
+				<option value = "ZIP">ZIP</option>
+			</select>
+			
+			</td>
+			
+			<td>
+
+			<td><input list = "zips" name ="zip"></td>
+				<datalist id = "zips">
+				{% for zip in allzips %}
+				<option value = "{{ zip.zip }}"> {{zip.zip}}</option>
+				{% endfor %}
+				</datalist>
+		</tr>
+		<tr>
+			<td></td>
+			<td><input type = "submit" value = "Search"></td>
+
+
+
+</form>
+
+
+</html>
