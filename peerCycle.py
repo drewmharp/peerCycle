@@ -54,7 +54,8 @@ urls = (
     '/create','create',
     '/bluecheese','search',
     '/search','search',
-    '/trip','trip'
+    '/trip','trip',
+    '/addbike','addbike'
 )
 
 # Create the database object.
@@ -159,7 +160,9 @@ class trip:
 	
 	#Render page
         return render_template('bookTrip.html', bike = bike, owner = owner)
-
+class addbike:
+    def GET(self):
+	return render_template('AddBikesOwners.html')
 ##########################################################################
 ################# DO NOT CHANGE ANYTHING BELOW THIS LINE! ################
 ##########################################################################
