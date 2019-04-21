@@ -6,6 +6,15 @@
 
 Hello, {{ name }}<br>
 
+{% if count == 1 %}
+	{% include 'ownerHomePage.html' %}
+{% endif %}
+
+
+
+
+
+
 <a href = '/search'>Search for Bikes</a>
 
 <a href = '/logout'>Logout</a>
