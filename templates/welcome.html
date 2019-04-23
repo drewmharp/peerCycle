@@ -3,11 +3,14 @@
 <title>Welcome Page</title>
 </head>
 <body>
-
+<h1> Welcome Page</h1>
 Hello, {{ name }}<br>
 
 {% if count == 1 %}
 	{% include 'ownerHomePage.html' %}
+
+{% else %}
+	{% include 'becomeOwner.html' %}
 {% endif %}
 
 

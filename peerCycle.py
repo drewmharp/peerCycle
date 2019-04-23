@@ -107,8 +107,8 @@ class welcome:
         if session.loggedIn:
 	    query= 'select count(1) from owner where userid = $usrid;'
 	    vars= {'usrid':session.user}
-	    count = db.query(query,vars)
-	    return render_template('welcome.html', name = session.name, count = count)
+	    count = db.query(query,vars)[0]
+	    return render_template('welcome.html', name = session.name, count = count['count'], user = session.user)
         else:
             raise web.seeother('/')
 
@@ -164,12 +164,12 @@ class trip:
 	#Render page
         return render_template('bookTrip.html', bike = bike, owner = owner)
 
-class book:
-    def POST(self):
-	hrlyOrDly = web.input().hrlyOrDly
-	tripLength = web.input().length
-	startDate = 
-	startTime = 
+#class book:
+ #   def POST(self):
+#	hrlyOrDly = web.input().hrlyOrDly
+#	tripLength = web.input().length
+#	startDate = 
+#	startTime = 
 
 class addbike:
     def GET(self):
