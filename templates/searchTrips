@@ -3,37 +3,27 @@
 	<body>
 		<h1> PeerCycle </h1>
 		<h2> Your Trips </h2>
+		Hello {{ name }}. Here is your trip history. <br>
 		<table>
 			<tr>
 				<th> Trip ID: </th>
 				<th> Owner ID </th>
 				<th> Renter ID </th>
 				<th> Bike ID </th>
-				$if ({{trips.isHrly}} == true){
-					<th> Hourly Rate: </th>
-					<th> Hours Rented: </th>
-				$} else {
-					<th> Daily Rate: </th>
-					<th> Days Rented: </th>
-				$}
 				<th> Tip Given: </th>
 				<th> Tax: </th>
 				<th> Total Cost: </th>
 			</tr>
 			<tr>
-				<td> {{trips.tripID}} </td>
-				<td> {{trips.OwnerID}} </td>
-				<td> {{trips.RenterID}} </td>
-				<td> {{trips.BikeID}} </td>
-				$if ({{trips.isHrly}} == true){
-					<td> {{bike.hlyRate}} </td>
-				$} else {
-					<td> {{bike.dlyRate}} </td>
-				$}
-				<td> {{trips.NumOfHrsDays}} </td>
-				<td> {{trips.tip}} </td>
-				<td> {{trips.tax}} </td>
-				<td> {{trips.totalCost}} </td>
+				<form method="POST" action="reviewTest.html">
+					<td><input type = "hidden" name = "tripID" value = "tripM"><input type = "submit" value ="{{ bike.tripid }}"></td>
+					<td> {{trips.OwnerID}} </td>
+					<td> {{trips.RenterID}} </td>
+					<td> {{trips.BikeID}} </td>
+					<td> {{trips.tip}} </td>
+					<td> {{trips.tax}} </td>
+					<td> {{trips.totalCost}} </td>
+				</form>
 			</tr>
 		</table>
 	</body>
