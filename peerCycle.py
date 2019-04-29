@@ -55,7 +55,8 @@ urls = (
     '/bluecheese','search',
     '/search','search',
     '/trip','trip',
-    '/addbike','addbike'
+   '/addbike','addbike'
+	'/becomeowner','becomowner'
 )
 
 # Create the database object.
@@ -163,6 +164,13 @@ class trip:
 	
 	#Render page
         return render_template('bookTrip.html', bike = bike, owner = owner)
+        
+        
+    
+    
+    
+    
+    
 
 #class book:
  #   def POST(self):
@@ -171,9 +179,16 @@ class trip:
 #	startDate = 
 #	startTime = 
 
-class addbike:
-    def GET(self):
-	return render_template('AddBikesOwners.html')
+
+
+class becomeover :
+	 def GET(self):
+		return render_template('becomeowner.html')
+	
+	#def POST(self):
+	#banknumber = web.input().banknumber
+	
+	
 ##########################################################################
 ################# DO NOT CHANGE ANYTHING BELOW THIS LINE! ################
 ##########################################################################
