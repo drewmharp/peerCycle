@@ -55,7 +55,8 @@ urls = (
     '/bluecheese','search',
     '/search','search',
     '/trip','trip',
-    '/addbike','addbike'
+    '/addbike','addbike',
+    '/book','book'
 )
 
 # Create the database object.
@@ -105,11 +106,15 @@ class login:
 class welcome:
     def GET(self):
         if session.loggedIn:
-	    query= 'select count(1) from owner where userid = $usrid;'
-	    vars= {'usrid':session.user}
-	    count = db.query(query,vars)[0]
-	    return render_template('welcome.html', name = session.name, count = count['count'], user = session.user)
-        else:
+	    try:
+
+    	        query= 'select count(1) from owner where userid = $usrid;'
+	        vars= {'usrid':session.user}
+	        count = db.query(query,vars)[0]
+	        return render_template('welcome.html', name = session.name, count = count['count'], user = session.user)
+            except:
+	       return render_template('welcome.html',name = session.name, count = 1)
+	else:
             raise web.seeother('/')
 
 class logout:
@@ -164,12 +169,49 @@ class trip:
 	#Render page
         return render_template('bookTrip.html', bike = bike, owner = owner)
 
-#class book:
- #   def POST(self):
-#	hrlyOrDly = web.input().hrlyOrDly
-#	tripLength = web.input().length
-#	startDate = 
-#	startTime = 
+class book:
+    def POST(self):
+
+# Define variables
+	hrlyOrDly = web.input().hrlyOrDly
+	tripLength = web.input().length
+	startDate = web.input().startDate 
+	startTime = web.input().startTime
+	bikeid = web.input().bikeId
+	tip = web.input().tip
+	tip = float(tip[1:])
+	isHrly = None	
+	price = None
+	ownerid = None
+        vars = {'bkid':bikeid}
+# Check to see if trip is by the hour or day       
+        if hrlyOrDly == "hrly":
+	    isHrly = True
+    	    query = 'select hlyRate,ownerid from bike where bikeid = $bkid' 
+	    result = db.query(query,vars)[0]
+	   # return result
+  	    price = result['hlyrate']
+	    ownerid = result['ownerid']
+	else:
+	    isHrly = False
+	    query = 'select dlyRate,ownerid from bike where bike id = $bkid'
+	    result = db.query(query,vars)[0]
+            price = result['dlyrate']
+	    ownerid = result['ownerid']
+
+# Compute the costs associated with the trip
+	derivedCost = float(tripLength)*float(price)
+	tax = derivedCost*0.06
+	totalCost = derivedCost + tax + tip
+#Insert into DB	
+	db.insert('trips', isHrly = isHrly, NumOfHrsDays = tripLength, Tip = tip, Tax = tax, DerivedCost = derivedCost, TotalCost = totalCost, OwnerId = ownerid, RenterId = session.user) 	
+# Select created Trip to use for reciept page/make sure inserted properly into DB
+        query = 'select * from trips where ownerid = $ownerid and renterid = $usrid and totalcost = $totalcost'	
+	vars = {'ownerid':ownerid,'usrid' : session.user,'totalcost':totalCost}
+	trip = db.query(query,vars)[0]
+	return render_template('tripReceipt.html',trip=trip) 
+	
+	
 
 class addbike:
     def GET(self):

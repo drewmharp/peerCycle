@@ -1,0 +1,36 @@
+<html>
+{{ trip }}
+
+
+<h1>Reciept</h1>	
+	<table>
+	{% if trip.ishrly %}
+		<tr>
+			<th> Number of Hrs:</th>
+			<td> {{ trip.numofhrsdays }} </td>		
+		</tr>
+	{% else %}
+		<tr>		
+			<th> Number of Days:</th>			
+			<td> {{ trip.numofhrsdays }} </td>
+		</tr>	
+	{% endif %}		
+		<tr>
+			<th>Cost:</th>	
+			<td>{{ trip.derivedcost }}</td>
+		</tr>
+		<tr>
+			<th>Tip:</th>
+			<td> {{ trip.tip }} </td>
+		</tr>		
+		<tr>		
+			<th> Tax:</th>			
+			<td> {{ trip.tax }} </td>
+		</tr>	
+		<tr>		
+			<th> Total:</th>			
+			<td> {{ trip.totalcost }} </td>
+		</tr>	
+	</table>
+
+</html>
