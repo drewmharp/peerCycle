@@ -1,0 +1,30 @@
+<html>
+	<head> PeerCycle: Your Trips </head>
+	<body>
+		<h1> PeerCycle </h1>
+		<h2> Your Trips </h2>
+		Hello {{ name }}. Here is your trip history. <br>
+		<table>
+			<tr>
+				<th> Trip ID: </th>
+				<th> Owner ID </th>
+				<th> Renter ID </th>
+				<th> Bike ID </th>
+				<th> Tip Given: </th>
+				<th> Tax: </th>
+				<th> Total Cost: </th>
+			</tr>
+			<tr>
+				<form method="POST" action="reviewTest.html">
+					<td><input type = "hidden" name = "tripID" value = "tripM"><input type = "submit" value ="{{ bike.tripid }}"></td>
+					<td> {{trips.OwnerID}} </td>
+					<td> {{trips.RenterID}} </td>
+					<td> {{trips.BikeID}} </td>
+					<td> {{trips.tip}} </td>
+					<td> {{trips.tax}} </td>
+					<td> {{trips.totalCost}} </td>
+				</form>
+			</tr>
+		</table>
+	</body>
+</html>

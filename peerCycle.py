@@ -56,7 +56,8 @@ urls = (
     '/search','search',
     '/trip','trip',
     '/addbike','addbike',
-    '/book','book'
+    '/book','book',
+    '/becomeowner','becomeowner'
 )
 
 # Create the database object.
@@ -168,6 +169,13 @@ class trip:
 	
 	#Render page
         return render_template('bookTrip.html', bike = bike, owner = owner)
+        
+        
+    
+    
+    
+    
+    
 
 class book:
     def POST(self):
@@ -213,9 +221,16 @@ class book:
 	
 	
 
-class addbike:
-    def GET(self):
-	return render_template('AddBikesOwners.html')
+
+
+class becomeowner :
+	 def GET(self):
+		return render_template('becomeowner.html')
+	
+	#def POST(self):
+	#banknumber = web.input().banknumber
+	
+	
 ##########################################################################
 ################# DO NOT CHANGE ANYTHING BELOW THIS LINE! ################
 ##########################################################################
