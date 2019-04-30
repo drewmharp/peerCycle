@@ -1,0 +1,52 @@
+<html>
+<head>
+<title>Add Bike</title>
+</head>
+<body>
+<h1>Owner</h1>
+<h1>Post Bike</h1>
+	<form action = "addbike" method = "POST">
+	<table id = "BIKE">
+		<tr>
+			<th>Make:</th>
+			<td><input type ="Make" name = "Make"></td>
+		</tr>
+		<tr>
+			<th> Model: </th>
+			<td><input type = "Model" name = "Model"></td>
+		</tr>
+		<tr>
+			<th> Model Year: </th>
+			<td><input type = "MakeYear" name = "MakeYear"></td>
+		</tr>
+		<tr>
+			<td> Description </th>
+			<textarea name="message" rows="7" cols="75"> Write a description about your bike.</textarea>
+			
+		<tr>
+			<th>Daily Rate:</th>
+			<td> <input type = "number" step = "0.25" min ="0" name ="dlyrate"> </td>
+		</tr>
+
+		<tr>
+			<th>Hourly Rate:</th>
+			<td> <input type = "number" step = "0.25" min ="0" name = "hlyrate"> </td>
+		</tr>
+
+		<tr>
+			<th> Type: </th>
+			<td> <select name ="type">
+					<option value= "cruiser">Cruiser</option>
+					<option value = "tandem">Tandem</option>
+					<option value = "mountain">Mountain</option>
+					<option value = "commuter">Commuter</option>
+					<option value = "recumbent">Recumbent</option>
+					</select>
+			</td>
+		</tr>
+		
+<input type="submit" value="Add">
+	</table>
+		</form>
+	</body>
+</html>

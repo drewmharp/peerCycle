@@ -1,9 +1,12 @@
 <html>
-{{ trip }}
 
 
 <h1>Reciept</h1>	
 	<table>
+		<tr>
+			<th>Start Date/Time:</th>	
+			<td>{{ trip.starttime }}</td>
+		</tr>
 	{% if trip.ishrly %}
 		<tr>
 			<th> Number of Hrs:</th>

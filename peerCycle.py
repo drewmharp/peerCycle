@@ -114,7 +114,7 @@ class welcome:
 	        count = db.query(query,vars)[0]
 	        return render_template('welcome.html', name = session.name, count = count['count'], user = session.user)
             except:
-	       return render_template('welcome.html',name = session.name, count = 1)
+	       return render_template('welcome.html',name = session.name, count = 0)
 	else:
             raise web.seeother('/')
 
@@ -169,12 +169,6 @@ class trip:
 	
 	#Render page
         return render_template('bookTrip.html', bike = bike, owner = owner)
-        
-        
-    
-    
-    
-    
     
 
 class book:
@@ -192,6 +186,7 @@ class book:
 	price = None
 	ownerid = None
         vars = {'bkid':bikeid}
+	
 # Check to see if trip is by the hour or day       
         if hrlyOrDly == "hrly":
 	    isHrly = True
@@ -211,11 +206,16 @@ class book:
 	derivedCost = float(tripLength)*float(price)
 	tax = derivedCost*0.06
 	totalCost = derivedCost + tax + tip
+
+# Format Timestamp
+	timeStamp = startDate + " " + startTime
+
 #Insert into DB	
-	db.insert('trips', isHrly = isHrly, NumOfHrsDays = tripLength, Tip = tip, Tax = tax, DerivedCost = derivedCost, TotalCost = totalCost, OwnerId = ownerid, RenterId = session.user) 	
+	db.insert('trips', isHrly = isHrly, NumOfHrsDays = tripLength, StartTime = timeStamp, Tip = tip, Tax = tax, DerivedCost = derivedCost, TotalCost = totalCost, OwnerId = ownerid, RenterId = session.user) 	
+
 # Select created Trip to use for reciept page/make sure inserted properly into DB
-        query = 'select * from trips where ownerid = $ownerid and renterid = $usrid and totalcost = $totalcost'	
-	vars = {'ownerid':ownerid,'usrid' : session.user,'totalcost':totalCost}
+        query = 'select * from trips where ownerid = $ownerid and renterid = $usrid and StartTime = $starttime'	
+	vars = {'ownerid':ownerid,'usrid' : session.user,'starttime': timeStamp}
 	trip = db.query(query,vars)[0]
 	return render_template('tripReceipt.html',trip=trip) 
 	
@@ -224,13 +224,46 @@ class book:
 
 
 class becomeowner :
-	 def GET(self):
-		return render_template('becomeowner.html')
+#	 def GET(self):
+#		return render_template('becomeOwner.html')
 	
-	#def POST(self):
-	#banknumber = web.input().banknumber
-	
-	
+	 def POST(self):
+	     banknumber = web.input().BankNo
+	     query = 'insert into owner values ($usrid, Null,$bankno);'
+	     vars = {'usrid':session.user,'bankno':banknumber}
+	     try:
+	         db.query(query,vars)	
+	    	 raise web.seeother('/welcome')
+	     except:
+		pass
+	    
+class addbike:
+    def GET(self):
+	return render_template('addbike.html') 
+    def POST(self):
+#Get user input
+	make = web.input().Make
+	model = web.input().Model
+	year = web.input().ModelYear
+	description = web.input().message
+	dlyrate = web.input().dlyrate
+	hlyrate = web.input().dlyrate
+	biketype = web.input().biketype
+	street = web.input().streetaddress
+	city = web.input().city
+	state = web.input().state
+	zipcode = web.input().zipcode
+	lockcode = web.input().lockcode
+#Insert into db
+	vars = {'ownerid':session.user,'make':make,'model':model,'year':year,'desc':description,
+'dlyrate':dlyrate,'hlyrate':hlyrate,'biketype':biketype,'address':street,'city':city,'state':state,'zip':zipcode, 'lockcode':lockcode}
+
+	query = 'insert into bike values($ownerid,$address,$city,$state,$zip,$dlyrate,$hlyrate,$model,$make,$biketype,$year'
+	try:
+	    db.query(query,vars)
+	    return render_template('ownerbikes.html')
+	except:
+	    return "Adding bike failed."
 ##########################################################################
 ################# DO NOT CHANGE ANYTHING BELOW THIS LINE! ################
 ##########################################################################

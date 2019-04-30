@@ -4,8 +4,15 @@
 </head>
 <body>
 <h1> Welcome Page</h1>
-Hello, {{ name }}<br>
+<br />
 
+Hello, {{ name }}<br>
+<br />
+
+<a href = '/search'>Search for Bikes</a>
+
+<a href = '/logout'>Logout</a>
+&nbsp
 {% if count == 1 %}
 	{% include 'ownerHomePage.html' %}
 
@@ -18,9 +25,6 @@ Hello, {{ name }}<br>
 
 
 
-<a href = '/search'>Search for Bikes</a>
-
-<a href = '/logout'>Logout</a>
 </body>
 </html>
 
