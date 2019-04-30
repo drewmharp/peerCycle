@@ -166,11 +166,10 @@ class trip:
 	#Render page
         return render_template('bookTrip.html', bike = bike, owner = owner)
         
-        
-    
+            
 class Tsearch:
 	
-	def GET(self):
+	def POST(self):
 		#get trip info for owners
 		myTrip = list(db.query('select * from trips where OwnerID = session.user;'))
 		return render_template('reviewTest.html',name=session.name, aTrip=myTrip)
