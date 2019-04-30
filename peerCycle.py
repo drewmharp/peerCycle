@@ -168,7 +168,7 @@ class trip:
         
         
     
-class searchT:
+class Tsearch:
 	
 	def GET(self):
 		#get trip info for owners
