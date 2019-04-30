@@ -55,7 +55,8 @@ urls = (
     '/bluecheese','search',
     '/search','search',
     '/trip','trip',
-   '/addbike','addbike'
+    '/Tsearch','Tsearch',
+    '/addbike','addbike'
 	'/becomeowner','becomowner'
 )
 
@@ -167,7 +168,12 @@ class trip:
         
         
     
-    
+class searchT:
+	
+	def GET(self):
+		#get trip info for owners
+		myTrip = list(db.query('select * from trips where OwnerID = session.user;'))
+		return render_template('reviewTest.html',name=session.name, aTrip=myTrip)
     
     
     
