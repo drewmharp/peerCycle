@@ -17,7 +17,7 @@
 		</tr>
 		<tr>
 			<th> Model Year: </th>
-			<td><input type = "MakeYear" name = "MakeYear"></td>
+			<td><input type = "ModelYear" name = "ModelYear"></td>
 		</tr>
 		<tr>
 			<td> Description </th>
@@ -35,7 +35,7 @@
 
 		<tr>
 			<th> Type: </th>
-			<td> <select name ="type">
+			<td> <select name ="biketype">
 					<option value= "cruiser">Cruiser</option>
 					<option value = "tandem">Tandem</option>
 					<option value = "mountain">Mountain</option>
@@ -44,9 +44,28 @@
 					</select>
 			</td>
 		</tr>
-		
-<input type="submit" value="Add">
+		<tr>
+			<th>Address: </th>
+			<td> <input type = "text" name = "streetaddress" value = "Street">		
+			<td> <input type ="text" name = "city" value = "City"> </td>
+			<td><input type = "hidden" name = "state" value = "Maryland"> </td>
+			<td> <select name = "zipcode" >
+				<option select = "selected">Zip</option>
+				{% for zip in allzips %}
+				<option value = "{{ zip.zip }}">{{zip.zip}}</option>
+				{% endfor %}
+				</select> </td>
+		</tr>
+		<tr>
+			<th> Lock Code:</th>
+			<td> <input type = "text" name = "lockcode" pattern = "[0-9]{8}">
+		<tr>
+			<td>		
+				<input type="submit" value="Add">
+			</td>
+		<tr>
 	</table>
+
 		</form>
 	</body>
 </html>

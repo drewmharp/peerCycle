@@ -57,8 +57,9 @@ urls = (
     '/trip','trip',
     '/addbike','addbike',
     '/book','book',
-    '/becomeowner','becomeowner'
-    '/Tsearch','Tsearch',
+    '/becomeowner','becomeowner',
+    '/becomerenter','becomerenter',
+    '/Tsearch','Tsearch'
 )
 
 # Create the database object.
@@ -109,11 +110,15 @@ class welcome:
     def GET(self):
         if session.loggedIn:
 	    try:
-
+		#Check if user is in owner table
     	        query= 'select count(1) from owner where userid = $usrid;'
 	        vars= {'usrid':session.user}
-	        count = db.query(query,vars)[0]
-	        return render_template('welcome.html', name = session.name, count = count['count'], user = session.user)
+	        isOwner = db.query(query,vars)[0]
+		#Check if user is in renter table
+		query = 'select count(1) from renter where userid = $usrid;'
+		isRenter = db.query(query,vars)[0]
+		
+	        return render_template('welcome.html', name = session.name, isOwner = isOwner['count'],isRenter = isRenter['count'], user = session.user)
             except:
 	       return render_template('welcome.html',name = session.name, count = 0)
 	else:
@@ -206,7 +211,7 @@ class book:
 	    ownerid = result['ownerid']
 	else:
 	    isHrly = False
-	    query = 'select dlyRate,ownerid from bike where bike id = $bkid'
+	    query = 'select dlyRate,ownerid from bike where bikeid = $bkid'
 	    result = db.query(query,vars)[0]
             price = result['dlyrate']
 	    ownerid = result['ownerid']
@@ -240,15 +245,21 @@ class becomeowner :
 	     banknumber = web.input().BankNo
 	     query = 'insert into owner values ($usrid, Null,$bankno);'
 	     vars = {'usrid':session.user,'bankno':banknumber}
-	     try:
-	         db.query(query,vars)	
-	    	 raise web.seeother('/welcome')
-	     except:
-		pass
-	    
+	     raise web.seeother('/welcome')
+
+class becomerenter:
+	def POST(self):
+	    creditnumber = web.input().CreditNo
+	    query = 'insert into renter values ($usrid,Null,$creditno);'
+	    vars = {'usrid':session.user,'creditno':creditnumber}
+	    db.query(query,vars)
+	    raise web.seeother('/welcome')
+	 
 class addbike:
     def GET(self):
-	return render_template('addbike.html') 
+	allZips = list(db.query('select * from uniqzips'))
+	return render_template('addbike.html',allzips = allZips) 
+
     def POST(self):
 #Get user input
 	make = web.input().Make
@@ -264,15 +275,12 @@ class addbike:
 	zipcode = web.input().zipcode
 	lockcode = web.input().lockcode
 #Insert into db
-	vars = {'ownerid':session.user,'make':make,'model':model,'year':year,'desc':description,
+	vars = {'ownerid':session.user,'make':make,'model':model,'tstamp': "01 01 " + year,'desc':description,
 'dlyrate':dlyrate,'hlyrate':hlyrate,'biketype':biketype,'address':street,'city':city,'state':state,'zip':zipcode, 'lockcode':lockcode}
 
-	query = 'insert into bike values($ownerid,$address,$city,$state,$zip,$dlyrate,$hlyrate,$model,$make,$biketype,$year'
-	try:
-	    db.query(query,vars)
-	    return render_template('ownerbikes.html')
-	except:
-	    return "Adding bike failed."
+	query = 'insert into bike values(default,$ownerid,$address,$city,$state,$zip,$dlyrate,$hlyrate,$model,$make,$biketype,$tstamp)'
+	db.query(query,vars)
+	return render_template('ownerbikes.html')
 ##########################################################################
 ################# DO NOT CHANGE ANYTHING BELOW THIS LINE! ################
 ##########################################################################

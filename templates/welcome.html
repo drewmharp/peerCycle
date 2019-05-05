@@ -9,16 +9,38 @@
 Hello, {{ name }}<br>
 <br />
 
-<a href = '/search'>Search for Bikes</a>
-<a href = '/Tsearch'>Review your Trips</a>
+
+
 <a href = '/logout'>Logout</a>
 &nbsp
-{% if count == 1 %}
+
+<table>
+
+
+{% if isOwner == 1 %}
 	{% include 'ownerHomePage.html' %}
 
 {% else %}
 	{% include 'becomeOwner.html' %}
 {% endif %}
+
+
+{% if isRenter == 1 %}
+	{% include 'renterHomePage.html' %}
+{% else %}
+	{% include 'becomeRenter.html' %}
+{% endif %}
+
+{% if isOwner + isRenter > 0 %}
+	&nbsp
+	<a href = '/Tsearch'>Review your Trips</a>
+{% endif %}
+
+</table>
+
+
+
+
 
 
 
