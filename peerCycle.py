@@ -178,11 +178,15 @@ class trip:
         
             
 class Tsearch:
-	
-	def POST(self):
-		#get trip info for owners
-		myTrip = list(db.query('select * from trips where OwnerID = session.user;'))
-		return render_template('reviewTest.html',name=session.name, aTrip=myTrip)
+	def GET(self):
+		#get trip info for owners and riders
+		Trip = 'select * from trips where renterid = $usrid;'
+		Otrip = 'select * from trips where ownerid = $usrid;'
+		vars = {'usrid':session.user}
+		Trips = list(db.query(Trip,vars))
+		Otrips = list(db.query(Otrip,vars))
+			
+		return render_template('searchTrips.html', results = Trips, Oresult = Otrip, name = session.name, us = session.user)
 
     
 class book:
