@@ -1,72 +1,79 @@
 <html>
-	<head> PeerCycle: Your Trips </head>
 	<body>
 		<h1> PeerCycle </h1>
 		<h2> Your Trips </h2>
-		Hello {{ name }}. Here is your trip history.
-		<table>
-			<tr>
-				<th> Trip ID </th>
-				<th> Owner ID </th>
-				<th> Renter ID </th>
-				<th> Bike ID </th>
-				<th> Derived Cost </th>
-				<th> Tip Given </th>
-				<th> Tax </th>
-				<th> Total Cost </th>
-				<th> Owner Review </th>
-				<th> Renter Review </th>
-			</tr>
-{% for trips in results %}
-			<tr>
-				<td> {{trips.tripid }} </td>
-				<td> {{trips.ownerid}} </td>
-				<td> {{trips.renterid}} </td>
-				<td> {{trips.bikeid}} </td>
-				<td> {{trips.derivedcost}} </td>
-				<td> {{trips.tip}} </td>
-				<td> {{trips.tax}} </td>
-				<td> {{trips.totalCost}} </td> <br>
-	
-					{% if trips.ownerexperence != null %}
-						<td> {{trips.ownerexperence}} </td>
-					{% else %}
-						<td> "No Response" </td>
-					{% endif %}
-					
-					{% if trips.riderexperence != null %}
-						<td> {{trips.riderexperence}} </td>
-					{% else %}
-						{% include 'relink.html' %}
-					{% endif %}
-			</tr>
-{% endfor %}
-
-{% for trips in Oresult %}
-			<tr>
-				<td> {{trips.tripid }} </td>
-				<td> {{trips.ownerid}} </td>
-				<td> {{trips.renterid}} </td>
-				<td> {{trips.bikeid}} </td>
-				<td> {{trips.derivedcost}} </td>
-				<td> {{trips.tip}} </td>
-				<td> {{trips.tax}} </td>
-				<td> {{trips.totalCost}} </td> <br>
-					
-					{% if trips.ownerexperence != null %}
-						<td> {{trips.ownerexperence}} </td>
-					{% else %}
-						{% include 'relink.html' %}
-					{% endif %}
-					
-					{% if trips.riderexperence != null %}
-						<td> {{trips.riderexperence}} </td>
-					{% else %}
-						<td> "No Response" </td>
-					{% endif %}
-			</tr>
-{% endfor %}			
-
-		</table>
+		Hello {{ name }}. Here is your trip history. <br>
 		<a href = "/welcome">Return to Home</a>
+		<h3> Your Rides </h3>
+		Here are the rides you have taken so far.
+{% if rentResults == 'select * from trips where userid = $usrid;' %}
+	You have not rented out a bike yet
+{% else %}
+	<table border = "1">
+	{% include 'relink.html' %}
+	{% for trips in rentResults %}
+		<tr>
+			<td> {{trips.tripid }} </td>
+			<td> {{trips.ownerid}} </td>
+			<td> {{trips.renterid}} </td>
+			<td> {{trips.bikeid}} </td>
+			<td> {{trips.derivedcost}} </td>
+			<td> {{trips.tip}} </td>
+			<td> {{trips.tax}} </td>
+			<td> {{trips.totalCost}} </td> <br>
+	
+			{% if trips.ownerexperience != None %}
+				<td> {{trips.ownerexperience}} </td>
+			{% else %}
+				<td> No Response </td>
+			{% endif %}
+					
+			{% if trips.riderexperience != None %}
+				<td> {{trips.riderexperience}} </td>
+			{% else %}
+				<form method="GET" action="review">
+					<td><input type = "hidden" name = "tripid" value = "{{trips.tripid}}"><input type = "submit" value ="Add a Review"></td>
+				</form>
+			{% endif %}
+		</tr>
+	{% endfor %}
+	</table>
+{% endif %}
+<h3> Your Rents</h3>
+Here are the rides you rented to others. <br>
+{% if ownResults == 'select * from trips where ownerid = $usrid;' %}
+	You have not rented out one of your Bikes yet.
+{% else %}
+	<table border = "1">
+	{% include 'relink.html' %}
+	{% for trips in ownResults %}
+		<tr>
+			<td> {{trips.tripid }} </td>
+			<td> {{trips.ownerid}} </td>
+			<td> {{trips.renterid}} </td>
+			<td> {{trips.bikeid}} </td>
+			<td> {{trips.derivedcost}} </td>
+			<td> {{trips.tip}} </td>
+			<td> {{trips.tax}} </td>
+			<td> {{trips.totalCost}} </td> <br>
+					
+			{% if trips.ownerexperience != None %}
+				<td> {{trips.ownerexperience}} </td>
+			{% else %}
+				<form method="GET" action="review">
+					<td><input type = "hidden" name = "tripid" value = "{{trips.tripid}}"><input type = "submit" value ="Add a Review"></td>
+				</form>
+			{% endif %}
+									
+			{% if trips.riderexperience != None %}
+				<td> {{trips.riderexperience}} </td>
+			{% else %}
+				<td> No Response </td>
+			{% endif %}
+		</tr>
+	{% endfor %}	
+	</table>
+{% endif %}
+
 	</body>
+</html>
