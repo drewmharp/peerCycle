@@ -6,18 +6,11 @@
 		<h1> PeerCycle </h1>
 		<h2> Rating Recived </h2>
 		<p> Your review has been recived and will be processed shortly. </p>
-		<h3> Your Rating was <?php echo ($_GET["rating"]); ?>. </h3>
 		
-		<?php echo $_GET["message"]; ?><br>
-		
-		<form method="post" action="/home/dmckeon/Desktop/Review/homePage.html">
+		<form method="GET" action="welcome">
 			<button type="submit">Back to Home</button>
 		</form>
-		<form method="post" action="/home/dmckeon/Desktop/Review/tripDetails.html">
-			<button type="submit">Back to Trip Overview</button>
-		</form>
-		<form method="post" action="/home/dmckeon/Desktop/Review/reviewTest.html">
-			<button type="submit">Edit Review</button>
-		</form>
+		<form method="GET" action="Tsearch">
+			<button type="submit">Back to Your Trips </button>
 	</body>
 </html>
