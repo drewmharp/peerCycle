@@ -59,7 +59,8 @@ urls = (
     '/book','book',
     '/becomeowner','becomeowner',
     '/becomerenter','becomerenter',
-    '/Tsearch','Tsearch'
+    '/Tsearch','Tsearch',
+    '/review', 'review'
 )
 
 # Create the database object.
