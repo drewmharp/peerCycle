@@ -176,7 +176,6 @@ class trip:
 	#Render page
         return render_template('bookTrip.html', bike = bike, owner = owner)
         
-            
 class Tsearch:
 	def GET(self):
 		#get trip info for owners and riders
@@ -186,9 +185,30 @@ class Tsearch:
 		Trips = list(db.query(Trip,vars))
 		Otrips = list(db.query(Otrip,vars))
 			
-		return render_template('searchTrips.html', results = Trips, Oresult = Otrip, name = session.name, us = session.user)
+		return render_template('searchTrips.html', rentResults = Trips, ownResults = Otrip, name = session.name, us = session.user)
 
-    
+class review:
+	def GET(self):
+		trip = web.input().tripid
+		print(trip)
+		return render_template('review.html', trip = trip)
+	
+	def POST(self):
+		trid = web.input().trip
+		star = web.input().rating
+		comment = web.input().message
+		vars = {'tar':trid}
+		rid = db.query('select renterid from trips where tripid = $tar', vars)
+		#oid = db.query('select ownerid from trips where tripid = $tar',vars)
+		db.insert('reviews', tripid = trid, reviewerid = session.user ,review = star ,comments = comment)
+		data = (star, trid)
+		if (rid == session.user):
+			idt = 'update trips set riderexperience = $s where tripid == $s;'
+			db.query(idt,data)
+		else:
+			idr = 'update trips set ownerexperience = $s where tripid == $s;'
+			db.query(idr,data)
+		return render_template('review_sent.html')    
 class book:
     def POST(self):
 
