@@ -207,7 +207,7 @@ class review:
 			db.query('update trips set riderexperience = $s where tripid = $st;',vars)
 		else:
 			db.query('update trips set ownerexperience = $s where tripid = $st;',vars)
-		return render_template('review_sent.html'
+		return render_template('reviewSent.html')
 				       
 class book:
     def POST(self):
