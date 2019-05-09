@@ -202,14 +202,13 @@ class review:
 		rid = db.query('select renterid from trips where tripid = $tar', vars)
 		#oid = db.query('select ownerid from trips where tripid = $tar',vars)
 		db.insert('reviews', tripid = trid, reviewerid = session.user ,review = star ,comments = comment)
-		data = (star, trid)
+		vars = {'s':star, 'st':trid}
 		if (rid == session.user):
-			idt = 'update trips set riderexperience = $s where tripid == $s;'
-			db.query(idt,data)
+			db.query('update trips set riderexperience = $s where tripid = $st;',vars)
 		else:
-			idr = 'update trips set ownerexperience = $s where tripid == $s;'
-			db.query(idr,data)
-		return render_template('review_sent.html')    
+			db.query('update trips set ownerexperience = $s where tripid = $st;',vars)
+		return render_template('review_sent.html'
+				       
 class book:
     def POST(self):
 
