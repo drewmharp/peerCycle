@@ -160,12 +160,9 @@ class trip:
     def POST(self):
 	#Get bike information
 	bikeID = web.input().bikeId
-	print(bikeID)
 	query = 'select * from bike where bikeid = $bID'
 	vars = {'bID':bikeID}
 	bike = db.query(query,vars)[0]
-	print(bike)
-	print(bike['ownerid'])
 	
 	#Get owner information
         query = 'select userid,firstname,rating from person natural join (select * from owner where userID = $ownrID) as t1;'
@@ -225,7 +222,7 @@ class book:
 	timeStamp = startDate + " " + startTime
 
 #Insert into DB	
-	db.insert('trips', isHrly = isHrly, NumOfHrsDays = tripLength, StartTime = timeStamp, Tip = tip, Tax = tax, DerivedCost = derivedCost, TotalCost = totalCost, OwnerId = ownerid, RenterId = session.user) 	
+	db.insert('trips', isHrly = isHrly, NumOfHrsDays = tripLength, StartTime = timeStamp, Tip = tip, Tax = tax, DerivedCost = derivedCost, TotalCost = totalCost, OwnerId = ownerid, RenterId = session.user, bikeid=bikeid) 	
 
 # Select created Trip to use for reciept page/make sure inserted properly into DB
         query = 'select * from trips where ownerid = $ownerid and renterid = $usrid and StartTime = $starttime'	
