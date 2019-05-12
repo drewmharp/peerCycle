@@ -6,7 +6,7 @@
 		<a href = "/welcome">Return to Home</a>
 		<h3> Your Rides </h3>
 		Here are the rides you have taken so far.
-{% if rentResults == 'select * from trips where userid = $usrid;' %}
+{% if rentResults == 'select * from trips where renterid = $usrid;' %}
 	You have not rented out a bike yet
 {% else %}
 	<table border = "1">
