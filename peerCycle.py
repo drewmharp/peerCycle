@@ -60,8 +60,9 @@ urls = (
     '/becomeowner','becomeowner',
     '/becomerenter','becomerenter',
     '/Tsearch','Tsearch',
+    '/Comment','Comment',
     '/review', 'review',
-	'/ownersbikes','ownersbikes'
+    '/ownersbikes','ownersbikes'
 )
 
 # Create the database object.
@@ -195,6 +196,23 @@ class Tsearch:
 		Otrips = list(db.query(Otrip,vars))
 			
 		return render_template('searchTrips.html', rentResults = Trips, ownResults = Otrip, name = session.name, us = session.user)
+
+class Comment:
+	def GET(self):
+		trip = web.input().tripid
+		print(trip)
+		ceomt = 'select * from reviews where tripid = $com and reviewerid != $comm;'
+		vars = {'com':trip, 'comm':session.user}
+		reviews = db.query(ceomt, vars)[0]
+		return render_template('comment.html', trips = trip, reviews = reviews)
+		
+	def POST(self):
+		trip = web.input().tripid
+		print(trip)
+		ceomt = 'select * from reviews where tripid = $com and reviewerid = $comm;'
+		vars = {'com':trip, 'comm':session.user}
+		review = db.query(ceomt, vars)[0]
+		return render_template('commentU.html', trips = trip, reviews = review)	
 
 class review:
 	def GET(self):
