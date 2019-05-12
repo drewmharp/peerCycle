@@ -60,7 +60,8 @@ urls = (
     '/becomeowner','becomeowner',
     '/becomerenter','becomerenter',
     '/Tsearch','Tsearch',
-    '/review', 'review'
+    '/review', 'review',
+	'/ownersbikes','ownersbikes'
 )
 
 # Create the database object.
@@ -218,19 +219,18 @@ class review:
 				       
 class book:
     def POST(self):
-
-# Define variables
-	hrlyOrDly = web.input().hrlyOrDly
-	tripLength = web.input().length
-	startDate = web.input().startDate 
-	startTime = web.input().startTime
-	bikeid = web.input().bikeId
-	tip = web.input().tip
-	tip = float(tip[1:])
-	isHrly = None	
-	price = None
-	ownerid = None
-        vars = {'bkid':bikeid}
+	# Define variables
+		hrlyOrDly = web.input().hrlyOrDly
+		tripLength = web.input().length
+		startDate = web.input().startDate 
+		startTime = web.input().startTime
+		bikeid = web.input().bikeId
+		tip = web.input().tip
+		tip = float(tip[1:])
+		isHrly = None	
+		price = None
+		ownerid = None
+		vars = {'bkid':bikeid}
 	
 # Check to see if trip is by the hour or day       
         if hrlyOrDly == "hrly":
@@ -240,38 +240,32 @@ class book:
 	   # return result
   	    price = result['hlyrate']
 	    ownerid = result['ownerid']
-	else:
-	    isHrly = False
-	    query = 'select dlyRate,ownerid from bike where bikeid = $bkid'
-	    result = db.query(query,vars)[0]
-            price = result['dlyrate']
-	    ownerid = result['ownerid']
+		else:
+			isHrly = False
+			query = 'select dlyRate,ownerid from bike where bikeid = $bkid'
+			result = db.query(query,vars)[0]
+		        price = result['dlyrate']
+			ownerid = result['ownerid']
 
 # Compute the costs associated with the trip
-	derivedCost = float(tripLength)*float(price)
-	tax = derivedCost*0.06
-	totalCost = derivedCost + tax + tip
+		derivedCost = float(tripLength)*float(price)
+		tax = derivedCost*0.06
+		totalCost = derivedCost + tax + tip
 
 # Format Timestamp
-	timeStamp = startDate + " " + startTime
+		timeStamp = startDate + " " + startTime
 
 #Insert into DB	
-	db.insert('trips', isHrly = isHrly, NumOfHrsDays = tripLength, StartTime = timeStamp, Tip = tip, Tax = tax, DerivedCost = derivedCost, TotalCost = totalCost, OwnerId = ownerid, RenterId = session.user, bikeid=bikeid) 	
+		db.insert('trips', isHrly = isHrly, NumOfHrsDays = tripLength, StartTime = timeStamp, Tip = tip, Tax = tax, DerivedCost = derivedCost, TotalCost = totalCost, OwnerId = ownerid, RenterId = session.user, bikeid=bikeid) 	
 
 # Select created Trip to use for reciept page/make sure inserted properly into DB
         query = 'select * from trips where ownerid = $ownerid and renterid = $usrid and StartTime = $starttime'	
-	vars = {'ownerid':ownerid,'usrid' : session.user,'starttime': timeStamp}
-	trip = db.query(query,vars)[0]
-	return render_template('tripReceipt.html',trip=trip) 
+		vars = {'ownerid':ownerid,'usrid' : session.user,'starttime': timeStamp}
+		trip = db.query(query,vars)[0]
+		return render_template('tripReceipt.html',trip=trip) 
 	
-	
-
-
 
 class becomeowner :
-#	 def GET(self):
-#		return render_template('becomeOwner.html')
-	
 	 def POST(self):
 	     banknumber = web.input().BankNo
 	     query = 'insert into owner values ($usrid, Null,$bankno);'
@@ -288,35 +282,43 @@ class becomerenter:
 	 
 class addbike:
     def GET(self):
-	allZips = list(db.query('select * from uniqzips'))
-	return render_template('addbike.html',allzips = allZips) 
+		allZips = list(db.query('select * from uniqzips'))
+		return render_template('addbike.html',allzips = allZips) 
 
     def POST(self):
 #Get user input
-	make = web.input().Make
-	model = web.input().Model
-	year = web.input().ModelYear
-	description = web.input().message
-	dlyrate = web.input().dlyrate
-	hlyrate = web.input().dlyrate
-	biketype = web.input().biketype
-	street = web.input().streetaddress
-	city = web.input().city
-	state = web.input().state
-	zipcode = web.input().zipcode
-	lockcode = web.input().lockcode
-#Insert into db
-	vars = {'ownerid':session.user,'make':make,'model':model,'tstamp': "01 01 " + year,'desc':description,
-'dlyrate':dlyrate,'hlyrate':hlyrate,'biketype':biketype,'address':street,'city':city,'state':state,'zip':zipcode, 'lockcode':lockcode}
+		make = web.input().Make
+		model = web.input().Model
+		year = web.input().ModelYear
+		description = web.input().message
+		dlyrate = web.input().dlyrate
+		hlyrate = web.input().dlyrate
+		biketype = web.input().biketype
+		street = web.input().streetaddress
+		city = web.input().city
+		state = web.input().state
+		zipcode = web.input().zipcode
+		lockcode = web.input().lockcode
+	#Insert into db
+		vars = {'ownerid':session.user,'make':make,'model':model,'tstamp': "01 01 " + year,'desc':description,
+	'dlyrate':dlyrate,'hlyrate':hlyrate,'biketype':biketype,'address':street,'city':city,'state':state,'zip':zipcode, 'lockcode':lockcode}
 
-	query = 'insert into bike values(default,$ownerid,$address,$city,$state,$zip,$dlyrate,$hlyrate,$model,$make,$biketype,$tstamp)'
-	try:
-	    db.query(query,vars)
-	    return "hey" 
-	    return render_template('ownerbikes.html')
-	except:
-	    return "Make sure you fill out every catagory!"
+		query = 'insert into bike values(default,$ownerid,$address,$city,$state,$zip,$dlyrate,$hlyrate,$model,$make,$biketype,$tstamp)'
+		try:
+			db.query(query,vars)
+			raise web.seeother('/ownersbikes')
+		except:
+			return "Make sure you fill out every catagory!"
 
+class ownersbikes:
+	
+    def GET(self):
+		vars = {"userid":session.user}
+		query = ('select * from bike where ownerid = $userid;')
+		Bikes = list(db.query(query,vars))
+		return render_template('ownersbikes.html',name = session.name, ownerid = session.user, results = Bikes)
+		
+	
 ##########################################################################
 ################# DO NOT CHANGE ANYTHING BELOW THIS LINE! ################
 ##########################################################################

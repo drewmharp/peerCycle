@@ -1,0 +1,45 @@
+<body><h2> Your Bikes: </h2>
+<div>
+<a href="/welcome">Return to Welcome Page</a>
+<a href = "/addbike">Add a new bike</a>
+
+Hello, {{ name }}<br>
+
+<table>
+	<tr>
+		<th></th>
+		<th> Daily Rate </th>
+		<th> Hourly Rate </th>
+		<th> Type </th>
+		<th>Model</th>
+		<th> Make </th>
+ 		<th>Year</th>
+		<th>City</th>
+		<th>ZIP</th>
+		<th>Description</th>
+	</tr><td>
+{% for bike in results %}
+	
+	<tr>
+	
+		<td>{{ bike.dlyrate }}</td>
+		<td> {{ bike.hlyrate }} </td>
+		<td> {{ bike.biketype }} </td>
+		<td> {{ bike.model}} </td>
+		<td> {{ bike.make }} </td>
+		<td> {{ bike.modelyear }} </td>
+		<td> {{ bike.city }} </td>
+		<td> {{ bike.zipcode }} </td>
+		<td> {{ bike.description }} </td>
+	    </td>
+	</tr><td>
+	
+{% endfor %}
+
+</td></td></table>
+
+
+
+</div>
+
+</body></html>
