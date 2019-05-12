@@ -66,3 +66,12 @@ create table OWNER
   RenterID integer references RENTER(UserID) on delete set null,
   BikeId integer references BIKE on delete set null
   );
+  
+  create table REVIEWS (
+	tripid integer,				  /* The ID value of the trip **/
+	reviewerid integer,			  /* The ID of the reviewer **/
+	review numeric(1,0),			  /* The value of the review recived **/
+	comments varChar (200)			  /* The reviewer's comments recived **/
+	primary key (tripid),
+	foreign key (tripid) references TRIPS(tripID) on delete set null
+);
