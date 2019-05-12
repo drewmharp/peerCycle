@@ -23,13 +23,17 @@
 			<td> {{trips.totalcost}} </td> <br>
 	
 			{% if trips.ownerexperience != None %}
-				<td> {{trips.ownerexperience}} </td>
+				<form method="GET" action="Comment">
+					<td> <input type = "hidden" name = "tripid" value = "{{trips.tripid}}"><input type = "submit" value ="{{trips.ownerexperience}}"></td>
+				</form>
 			{% else %}
 				<td> No Response </td>
 			{% endif %}
 					
 			{% if trips.riderexperience != None %}
-				<td> {{trips.riderexperience}} </td>
+				<form method="POST" action="Comment">
+					<td><input type = "hidden" name = "tripid" value = "{{trips.tripid}}"><input type = "submit" value ="{{trips.riderexperience}}"></td>
+				</form>
 			{% else %}
 				<form method="GET" action="review">
 					<td><input type = "hidden" name = "tripid" value = "{{trips.tripid}}"><input type = "submit" value ="Add a Review"></td>
@@ -58,7 +62,9 @@ Here are the rides you rented to others. <br>
 			<td> {{trips.totalcost}} </td> <br>
 					
 			{% if trips.ownerexperience != None %}
-				<td> {{trips.ownerexperience}} </td>
+				<form method="POST" action="Comment">
+					<td> <input type = "hidden" name = "tripid" value = "{{trips.tripid}}"><input type = "submit" value ="{{trips.ownerexperience}}"></td>
+				</form>
 			{% else %}
 				<form method="GET" action="review">
 					<td><input type = "hidden" name = "tripid" value = "{{trips.tripid}}"><input type = "submit" value ="Add a Review"></td>
@@ -66,7 +72,9 @@ Here are the rides you rented to others. <br>
 			{% endif %}
 									
 			{% if trips.riderexperience != None %}
-				<td> {{trips.riderexperience}} </td>
+				<form method="GET" action="Comment">
+					<td> <input type = "hidden" name = "tripid" value = "{{trips.tripid}}"><input type = "submit" value ="{{trips.riderexperience}}"></td>
+				</form>
 			{% else %}
 				<td> No Response </td>
 			{% endif %}
