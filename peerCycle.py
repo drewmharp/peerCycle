@@ -220,49 +220,46 @@ class review:
 class book:
     def POST(self):
 	# Define variables
-		hrlyOrDly = web.input().hrlyOrDly
-		tripLength = web.input().length
-		startDate = web.input().startDate 
-		startTime = web.input().startTime
-		bikeid = web.input().bikeId
-		tip = web.input().tip
-		tip = float(tip[1:])
-		isHrly = None	
-		price = None
-		ownerid = None
-		vars = {'bkid':bikeid}
-	
+	hrlyOrDly = web.input().hrlyOrDly
+	tripLength = web.input().length
+	startDate = web.input().startDate 
+	startTime = web.input().startTime
+	bikeid = web.input().bikeId
+	tip = web.input().tip
+	tip = float(tip[1:])
+	isHrly = None	
+	price = None
+	ownerid = None
+	vars = {'bkid':bikeid}
 # Check to see if trip is by the hour or day       
         if hrlyOrDly == "hrly":
 	    isHrly = True
-    	    query = 'select hlyRate,ownerid from bike where bikeid = $bkid' 
+	    query = 'select hlyRate,ownerid from bike where bikeid = $bkid' 
 	    result = db.query(query,vars)[0]
-	   # return result
-  	    price = result['hlyrate']
+	    price = result['hlyrate']
 	    ownerid = result['ownerid']
-		else:
-			isHrly = False
-			query = 'select dlyRate,ownerid from bike where bikeid = $bkid'
-			result = db.query(query,vars)[0]
-		        price = result['dlyrate']
-			ownerid = result['ownerid']
-
+	else:
+	    isHrly = False
+	    query = 'select dlyRate,ownerid from bike where bikeid = $bkid'
+	    result = db.query(query,vars)[0]
+            price = result['dlyrate']
+	    ownerid = result['ownerid']
 # Compute the costs associated with the trip
-		derivedCost = float(tripLength)*float(price)
-		tax = derivedCost*0.06
-		totalCost = derivedCost + tax + tip
+	    derivedCost = float(tripLength)*float(price)
+	    tax = derivedCost*0.06
+	    totalCost = derivedCost + tax + tip
 
 # Format Timestamp
-		timeStamp = startDate + " " + startTime
+	    timeStamp = startDate + " " + startTime
 
 #Insert into DB	
-		db.insert('trips', isHrly = isHrly, NumOfHrsDays = tripLength, StartTime = timeStamp, Tip = tip, Tax = tax, DerivedCost = derivedCost, TotalCost = totalCost, OwnerId = ownerid, RenterId = session.user, bikeid=bikeid) 	
+	    db.insert('trips', isHrly = isHrly, NumOfHrsDays = tripLength, StartTime = timeStamp, Tip = tip, Tax = tax, DerivedCost = derivedCost, TotalCost = totalCost, OwnerId = ownerid, RenterId = session.user, bikeid=bikeid) 	
 
 # Select created Trip to use for reciept page/make sure inserted properly into DB
-        query = 'select * from trips where ownerid = $ownerid and renterid = $usrid and StartTime = $starttime'	
-		vars = {'ownerid':ownerid,'usrid' : session.user,'starttime': timeStamp}
-		trip = db.query(query,vars)[0]
-		return render_template('tripReceipt.html',trip=trip) 
+            query = 'select * from trips where ownerid = $ownerid and renterid = $usrid and StartTime = $starttime'	
+	    vars = {'ownerid':ownerid,'usrid' : session.user,'starttime': timeStamp}
+	    trip = db.query(query,vars)[0]
+	    return render_template('tripReceipt.html',trip=trip) 
 	
 
 class becomeowner :
