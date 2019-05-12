@@ -285,6 +285,7 @@ class becomeowner :
 	     banknumber = web.input().BankNo
 	     query = 'insert into owner values ($usrid, Null,$bankno);'
 	     vars = {'usrid':session.user,'bankno':banknumber}
+	     db.query(query,vars)
 	     raise web.seeother('/welcome')
 
 class becomerenter:
