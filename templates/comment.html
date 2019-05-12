@@ -1,0 +1,12 @@
+<html>
+	<body>
+		<h1> PeerCycle </h1>
+		<h2> Comments on Trip: {{ trips }} </h2>
+
+		User# {{ reviews.reviewerid }} rated you {{ reviews.review }} stars. <br>
+		<h4>They commented..</h4>
+		{{ reviews.comments }}	
+		<br>
+		<a href = "/Tsearch">Return to Trips</a>		
+	</body>
+</html>
