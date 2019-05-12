@@ -150,10 +150,20 @@ class search:
 		
     def POST(self):
 	zipCode = web.input().zip
-	query = 'select * from bike where ZIPCode = $zip;'
 	vars = {'zip':zipCode}
-	results = list(db.query(query,vars))
-		
+  	try:
+            isaltzips = web.input().nearbyzips
+	    query = 'select * from nzips where initialzip = $zip'
+	    allzips = db.query(query,vars)
+	    query = 'select * from bike where ZIPcode = $zip or '
+	    for z in allzips:
+	        query = query + 'ZIPcode = ' + str(z['adjzip']) + ' or '
+  	    query = query[:-4] + ';'
+	except:
+	    query = 'select * from bike where ZIPcode = $zip'	
+	results = db.query(query,vars)   
+#	query = 'select * from bike where ZIPCode = $zip;'
+#	results = list(db.query(query,vars))
 	return render_template('bikeResult.html',name = session.name, results = results)		
 
 class trip:
@@ -300,8 +310,13 @@ class addbike:
 'dlyrate':dlyrate,'hlyrate':hlyrate,'biketype':biketype,'address':street,'city':city,'state':state,'zip':zipcode, 'lockcode':lockcode}
 
 	query = 'insert into bike values(default,$ownerid,$address,$city,$state,$zip,$dlyrate,$hlyrate,$model,$make,$biketype,$tstamp)'
-	db.query(query,vars)
-	return render_template('ownerbikes.html')
+	try:
+	    db.query(query,vars)
+	    return "hey" 
+	    return render_template('ownerbikes.html')
+	except:
+	    return "Make sure you fill out every catagory!"
+
 ##########################################################################
 ################# DO NOT CHANGE ANYTHING BELOW THIS LINE! ################
 ##########################################################################

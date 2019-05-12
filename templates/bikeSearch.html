@@ -1,14 +1,11 @@
 <html>
-	
+	<h3> Search for Bikes </h3>
 <form action="search" method="POST">
 	<table id="bsearch">
 		<tr>
-			<td>
-			<select name = "searchType">
-				<option value = "ZIP">ZIP</option>
-			</select>
-			
-			</td>
+			<th>
+			Zip
+			</th>
 			
 			<td>
 
@@ -18,11 +15,12 @@
 				<option value = "{{ zip.zip }}"> {{zip.zip}}</option>
 				{% endfor %}
 				</datalist>
+			<td><input type = "checkbox" name = "nearbyzips">Include nearby ZIPs</input>
 		</tr>
 		<tr>
 			<td></td>
 			<td><input type = "submit" value = "Search"></td>
-
+		</tr>
 
 
 </form>
