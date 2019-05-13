@@ -1,0 +1,21 @@
+Description of Project PeerCycle by Group GUI Griffins:
+
+	PeerCycle allows a user to rent bikes online. The user can be a bike renter, provider, or both. A provider can post any number of bikes to be rented out by others. The user can find the bikes within there local ZIP code and can select when and for how long they want to rent it for. After there trip, the renter and the owner can each post a rating and review of the other. These reviews can be used to show there satisfaction with the experience/condition the bike is returned in, provide helpful critique for improvement or just to insult them to the extent only the internet allows.
+
+Changes from Formal Specifications:
+
+	Several aspects were changed from the Formal Specifications such as adding the ability to add a comment along with the Star Rating for the reviews. We did this, so that the person seeing the review would have a better idea of what they needed to improve and what was well received.  We also created the Review page to allow the user to create reviews and send them to the review table. The Bike History page served as both a way to link user to create the reviews and also allow them to see the comments others made about them. 
+
+For our fun piece of “flare” we changed from a series of bike facts being displayed, to a fun logo.
+
+Application Documentation:
+
+	The system administrator information is contained within views in the database. The information can be viewed by running ‘select * from (viewname)’. The views, defined in the system administrator section of the formal specification, are as follows: totalrevenue, zipcoderevenue, bikesbyzip, bikeuses, and revenuebyowner.
+
+	If running outside of the phoenix system: After downloading the main folder, create a database and import the files from the sql folder into it. 
+	Change the db username and password in the peerCycle.py file.
+	Run python file peerCycle.py using a local server.
+
+	If running on phoenix and using default database:
+		Run python file peerCycle.py using a local server.
+		
