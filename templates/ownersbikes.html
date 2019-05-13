@@ -21,7 +21,7 @@ Hello, {{ name }}<br>
 {% for bike in results %}
 	
 	<tr>
-	
+		<td><form method = "POST" action = "updatebike"><input type = hidden name = "bikeid" value = "{{ bike.bikeid }}"><input type = "submit" value = "Update"></form></td>
 		<td>{{ bike.dlyrate }}</td>
 		<td> {{ bike.hlyrate }} </td>
 		<td> {{ bike.biketype }} </td>

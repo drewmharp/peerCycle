@@ -52,7 +52,6 @@ urls = (
     '/logout', 'logout',
     '/welcome','welcome', 
     '/create','create',
-    '/bluecheese','search',
     '/search','search',
     '/trip','trip',
     '/addbike','addbike',
@@ -62,7 +61,10 @@ urls = (
     '/Tsearch','Tsearch',
     '/Comment','Comment',
     '/review', 'review',
-    '/ownersbikes','ownersbikes'
+    '/ownersbikes','ownersbikes',
+    '/updatebike','updatebike',
+    '/updatebikesubmit','updatebikesubmit',
+    '/logo','logo'
 )
 
 # Create the database object.
@@ -112,18 +114,14 @@ class login:
 class welcome:
     def GET(self):
         if session.loggedIn:
-	    try:
-		#Check if user is in owner table
-    	        query= 'select count(1) from owner where userid = $usrid;'
-	        vars= {'usrid':session.user}
-	        isOwner = db.query(query,vars)[0]
-		#Check if user is in renter table
-		query = 'select count(1) from renter where userid = $usrid;'
-		isRenter = db.query(query,vars)[0]
-		
-	        return render_template('welcome.html', name = session.name, isOwner = isOwner['count'],isRenter = isRenter['count'], user = session.user)
-            except:
-	       return render_template('welcome.html',name = session.name, count = 0)
+	    #Check if user is in owner table
+    	    query= 'select count(1) from owner where userid = $usrid;'
+	    vars= {'usrid':session.user}
+	    isOwner = db.query(query,vars)[0]
+	    #Check if user is in renter table
+            query = 'select count(1) from renter where userid = $usrid;'
+	    isRenter = db.query(query,vars)[0]
+            return render_template('welcome.html', name = session.name, isOwner = isOwner['count'],isRenter = isRenter['count'], user = session.user)
 	else:
             raise web.seeother('/')
 
@@ -198,42 +196,42 @@ class Tsearch:
 		return render_template('searchTrips.html', rentResults = Trips, ownResults = Otrip, name = session.name, us = session.user)
 
 class Comment:
-	def GET(self):
-		trip = web.input().tripid
-		print(trip)
-		ceomt = 'select * from reviews where tripid = $com and reviewerid != $comm;'
-		vars = {'com':trip, 'comm':session.user}
-		reviews = db.query(ceomt, vars)[0]
-		return render_template('comment.html', trips = trip, reviews = reviews)
+    def GET(self):
+	trip = web.input().tripid
+	print(trip)
+	ceomt = 'select * from reviews where tripid = $com and reviewerid != $comm;'
+	vars = {'com':trip, 'comm':session.user}
+	reviews = db.query(ceomt, vars)[0]
+	return render_template('comment.html', trips = trip, reviews = reviews)
 		
-	def POST(self):
-		trip = web.input().tripid
-		print(trip)
-		ceomt = 'select * from reviews where tripid = $com and reviewerid = $comm;'
-		vars = {'com':trip, 'comm':session.user}
-		review = db.query(ceomt, vars)[0]
-		return render_template('commentU.html', trips = trip, reviews = review)	
+    def POST(self):
+	trip = web.input().tripid
+	print(trip)
+	ceomt = 'select * from reviews where tripid = $com and reviewerid = $comm;'
+	vars = {'com':trip, 'comm':session.user}
+	review = db.query(ceomt, vars)[0]
+	return render_template('commentU.html', trips = trip, reviews = review)	
 
 class review:
-	def GET(self):
-		trip = web.input().tripid
-		print(trip)
-		return render_template('review.html', trip = trip)
+    def GET(self):
+	trip = web.input().tripid
+	print(trip)
+	return render_template('review.html', trip = trip)
 	
-	def POST(self):
-		trid = web.input().trip
-		star = web.input().rating
-		comment = web.input().message
-		vars = {'tar':trid}
-		rid = db.query('select renterid from trips where tripid = $tar', vars)
-		#oid = db.query('select ownerid from trips where tripid = $tar',vars)
-		db.insert('reviews', tripid = trid, reviewerid = session.user ,review = star ,comments = comment)
-		vars = {'s':star, 'st':trid}
-		if (rid == session.user):
-			db.query('update trips set riderexperience = $s where tripid = $st;',vars)
-		else:
-			db.query('update trips set ownerexperience = $s where tripid = $st;',vars)
-		return render_template('reviewSent.html')
+    def POST(self):
+	trid = web.input().trip
+	star = web.input().rating
+	comment = web.input().message
+	vars = {'tar':trid}
+	rid = db.query('select renterid from trips where tripid = $tar', vars)
+	#oid = db.query('select ownerid from trips where tripid = $tar',vars)
+	db.insert('reviews', tripid = trid, reviewerid = session.user ,review = star ,comments = comment)
+	vars = {'s':star, 'st':trid}
+	if (rid == session.user):
+  	    db.query('update trips set riderexperience = $s where tripid = $st;',vars)
+	else:
+ 	    db.query('update trips set ownerexperience = $s where tripid = $st;',vars)
+	return render_template('reviewSent.html')
 				       
 class book:
     def POST(self):
@@ -281,58 +279,108 @@ class book:
 	
 
 class becomeowner :
-	 def POST(self):
-	     banknumber = web.input().BankNo
-	     query = 'insert into owner values ($usrid, Null,$bankno);'
-	     vars = {'usrid':session.user,'bankno':banknumber}
-	     raise web.seeother('/welcome')
+    def POST(self):
+        banknumber = web.input().BankNo
+        query = 'insert into owner values ($usrid, Null,$bankno);'
+        vars = {'usrid':session.user,'bankno':banknumber}
+        db.query(query,vars)
+        raise web.seeother('/welcome')
 
 class becomerenter:
-	def POST(self):
-	    creditnumber = web.input().CreditNo
-	    query = 'insert into renter values ($usrid,Null,$creditno);'
-	    vars = {'usrid':session.user,'creditno':creditnumber}
-	    db.query(query,vars)
-	    raise web.seeother('/welcome')
+    def POST(self):
+        creditnumber = web.input().CreditNo
+        query = 'insert into renter values ($usrid,Null,$creditno);'
+        vars = {'usrid':session.user,'creditno':creditnumber}
+        db.query(query,vars)
+        raise web.seeother('/welcome')
 	 
 class addbike:
     def GET(self):
-		allZips = list(db.query('select * from uniqzips'))
-		return render_template('addbike.html',allzips = allZips) 
+	allZips = list(db.query('select * from uniqzips'))
+	return render_template('addbike.html',allzips = allZips) 
 
     def POST(self):
 #Get user input
-		make = web.input().Make
-		model = web.input().Model
-		year = web.input().ModelYear
-		description = web.input().message
-		dlyrate = web.input().dlyrate
-		hlyrate = web.input().dlyrate
-		biketype = web.input().biketype
-		street = web.input().streetaddress
-		city = web.input().city
-		state = web.input().state
-		zipcode = web.input().zipcode
-		lockcode = web.input().lockcode
+	make = web.input().Make
+	model = web.input().Model
+	year = web.input().ModelYear
+	description = web.input().message
+	dlyrate = web.input().dlyrate
+	hlyrate = web.input().dlyrate
+	biketype = web.input().biketype
+	street = web.input().streetaddress
+	city = web.input().city
+	state = web.input().state
+	zipcode = web.input().zipcode
+	lockcode = web.input().lockcode
 	#Insert into db
-		vars = {'ownerid':session.user,'make':make,'model':model,'tstamp': "01 01 " + year,'desc':description,
+	vars = {'ownerid':session.user,'make':make,'model':model,'tstamp': "01 01 " + year,'desc':description,
 	'dlyrate':dlyrate,'hlyrate':hlyrate,'biketype':biketype,'address':street,'city':city,'state':state,'zip':zipcode, 'lockcode':lockcode}
 
-		query = 'insert into bike values(default,$ownerid,$address,$city,$state,$zip,$dlyrate,$hlyrate,$model,$make,$biketype,$tstamp)'
-		try:
-			db.query(query,vars)
-			raise web.seeother('/ownersbikes')
-		except:
-			return "Make sure you fill out every catagory!"
+	query = 'insert into bike values(default,$ownerid,$address,$city,$state,$zip,$dlyrate,$hlyrate,$model,$make,$biketype,$tstamp)'
+	try:
+	    db.query(query,vars)
+	    raise web.seeother('/ownersbikes')
+	except:
+	    return "Make sure you fill out every catagory!"
 
+class updatebike:
+    def POST(self):
+        bikeid = web.input().bikeid
+    #Check that user owns given bike
+        vars = {'userid':session.user}
+        query = 'select bikeid from bike where ownerid = $userid'
+        usersbikes = list(db.query(query,vars))
+	allZips = list(db.query('select * from uniqzips'))
+	for b in usersbikes:
+	    if int(bikeid) == int(b['bikeid']):
+		query = 'select * from bike where bikeid = $bikeid;'
+		vars = {'bikeid':bikeid}
+		bike = db.query(query,vars)[0]
+		return render_template('updateBike.html',bike = bike,allzips =allZips)
+	return "Hmm, that bike doesn't seem to belong to you."
+
+class updatebikesubmit:
+
+    def POST(self):
+#Get user input
+	bikeid = web.input().bike
+	make = web.input().Make
+	model = web.input().Model
+	year = web.input().ModelYear
+	description = web.input().message
+	dlyrate = web.input().dlyrate
+	hlyrate = web.input().dlyrate
+	biketype = web.input().biketype
+	street = web.input().streetaddress
+	city = web.input().city
+	state = web.input().state
+	zipcode = web.input().zipcode
+	lockcode = web.input().lockcode
+    #Check that user owns given bike
+        vars = {'userid':session.user}
+        query = 'select bikeid from bike where ownerid = $userid'
+        usersbikes = list(db.query(query,vars))
+	for b in usersbikes:
+	    if int(bikeid) == int(b['bikeid']):
+	#Insert into db
+	        vars = {'bId':bikeid,'ownerid':session.user,'make':make,'model':model,'tstamp': "01 01 " + year,'desc':description,'dlyrate':dlyrate,'hlyrate':hlyrate,'biketype':biketype,'address':street,'city':city,'state':state,'zip':zipcode, 'lockcode':lockcode}
+	        query = 'update bike set description = $desc, streetaddress = $address, city = $city,state =$state, zipcode = $zip, dlyrate =$dlyrate,hlyrate = $hlyrate,model = $model,make =$make, biketype = $biketype, modelyear =  $tstamp, lockcode = $lockcode where bikeid = $bId;'
+	        result = db.query(query,vars)
+		raise web.seeother('/ownersbikes')
+        return "Hmm, it doesn't seem like you own that bike."
 class ownersbikes:
 	
     def GET(self):
-		vars = {"userid":session.user}
-		query = ('select * from bike where ownerid = $userid;')
-		Bikes = list(db.query(query,vars))
-		return render_template('ownersbikes.html',name = session.name, ownerid = session.user, results = Bikes)
+	vars = {"userid":session.user}
+	query = ('select * from bike where ownerid = $userid;')
+	Bikes = list(db.query(query,vars))
+	return render_template('ownersbikes.html',name = session.name, ownerid = session.user, results = Bikes)
 		
+class logo:
+    def GET(self):
+	image = open("../peerCycle/resources/logo.png",'rb').read()
+	return image
 	
 ##########################################################################
 ################# DO NOT CHANGE ANYTHING BELOW THIS LINE! ################

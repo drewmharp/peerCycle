@@ -5,32 +5,33 @@
 <body>
 <h1>Owner</h1>
 <h1>Post Bike</h1>
-	<form action = "addbike" method = "POST">
+	<form action = "updatebikesubmit" method = "POST">
 	<table id = "BIKE">
+		<input type = "hidden" value = "{{ bike.bikeid }}" name = "bike">
 		<tr>
 			<th>Make:</th>
-			<td><input type ="text" name = "Make"></td>
+			<td><input type ="text" name = "Make" value = "{{ bike.make }}"></td>
 		</tr>
 		<tr>
 			<th> Model: </th>
-			<td><input type = "text" name = "Model"></td>
+			<td><input type = "text" name = "Model" value = "{{ bike.model }}"></td>
 		</tr>
 		<tr>
 			<th> Model Year: </th>
-			<td><input type = "text" name = "ModelYear"></td>
+			<td><input type = "text" name = "ModelYear" value = "{{ bike.modelyear }}"></td>
 		</tr>
 		<tr>
 			<td> Description </th>
-			<textarea name="message" rows="7" cols="75"> Write a description about your bike.</textarea>
+			<textarea name="message" rows="7" cols="75"> {{ bike.description }} </textarea>
 			
 		<tr>
 			<th>Daily Rate:</th>
-			<td> <input type = "number" step = "0.25" min ="0" name ="dlyrate"> </td>
+			<td> <input type = "number" step = "0.25" min ="0" name ="dlyrate" value = "{{ bike.dlyrate }}"> </td>
 		</tr>
 
 		<tr>
 			<th>Hourly Rate:</th>
-			<td> <input type = "number" step = "0.25" min ="0" name = "hlyrate"> </td>
+			<td> <input type = "number" step = "0.25" min ="0" name = "hlyrate" value = "{{ bike.hlyrate }}"> </td>
 		</tr>
 
 		<tr>
@@ -58,10 +59,10 @@
 		</tr>
 		<tr>
 			<th> Lock Code:</th>
-			<td> <input type = "text" name = "lockcode" pattern = "[0-9]{8}">
+			<td> <input type = "text" name = "lockcode" pattern = "[0-9]{8}" value = " {{bike.lockcode}}">
 		<tr>
 			<td>		
-				<input type="submit" value="Add">
+				<input type="submit" value="Update">
 			</td>
 		<tr>
 	</table>
